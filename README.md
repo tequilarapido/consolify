@@ -1,4 +1,4 @@
 
-# tequilrapido/name
+# tequilrapido/consolify
 
 wip ...
