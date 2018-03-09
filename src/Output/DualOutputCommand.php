@@ -7,7 +7,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Exception;
 
-abstract class DualOuputCommand extends Command
+abstract class DualOutputCommand extends Command
 {
     public function run(InputInterface $input, OutputInterface $output)
     {
