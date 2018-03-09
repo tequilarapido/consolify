@@ -67,10 +67,15 @@ interface Progress
     /**
      * Return persisted progress information from store.
      *
-     * @param $uid
      * @return
      */
-    public static function getPersisted($uid);
+    public function getPersisted();
+
+    /**
+     * Delete persisted progress information from store.
+     *
+     */
+    public function deletePersisted();
 
     /**
      * Forward calls to original progress bar.
@@ -80,6 +85,4 @@ interface Progress
      * @return mixed
      */
     public function __call($name, $arguments);
-
-
 }

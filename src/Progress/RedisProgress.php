@@ -2,6 +2,7 @@
 
 namespace Tequilarapido\Consolify\Progress;
 
+use Illuminate\Redis\RedisManager;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Helper\Helper;
 
@@ -27,7 +28,7 @@ class RedisProgress implements Progress
     {
         $this->uid = $uid;
 
-        return $uid;
+        return $this;
     }
 
     public function advance($step = 1)
@@ -65,11 +66,28 @@ class RedisProgress implements Progress
         ];
     }
 
-    public static function getPersisted($uid)
+    protected function persistProgress()
     {
-        $result = app('redis')->connection()->get(static::prefixedKey($uid));
+        static::redis()->set(
+            static::prefixedKey($this->uid),
+            json_encode($this->summary())
+        );
+    }
+
+    public function getPersisted()
+    {
+        $result = static::redis()->get(static::prefixedKey($this->uid));
 
         return $result ? json_decode($result) : null;
+    }
+
+    public function deletePersisted()
+    {
+        $pattern = static::prefixedKey($this->uid) . '*';
+
+        if (!empty($keys = static::redis()->keys($pattern))) {
+            static::redis()->del(static::redis()->keys($pattern));
+        }
     }
 
     public function __call($name, $arguments)
@@ -77,12 +95,9 @@ class RedisProgress implements Progress
         return call_user_func_array([$this->bar, $name], $arguments);
     }
 
-    protected function persistProgress()
+    public function finishProgress()
     {
-        app('redis')->connection()->set(
-            static::prefixedKey($this->uid),
-            json_encode($this->summary())
-        );
+        $this->progress->finish();
     }
 
     protected static function prefixedKey($key)
@@ -111,4 +126,13 @@ class RedisProgress implements Progress
         return floor($this->bar->getProgressPercent() * 100);
     }
 
+    /**
+     * return Redis connection
+     *
+     * @return \Illuminate\Redis\Connections\Connection
+     */
+    protected static function redis()
+    {
+        return app('redis')->connection();
+    }
 }

@@ -12,6 +12,12 @@ class OriginalProgressBar implements Progress
     /** @var string */
     protected $uid;
 
+    public function __construct(ProgressBar $bar, $uid)
+    {
+        $this->bar = $bar;
+        $this->uid = $uid;
+    }
+
     public function setProgressBar(ProgressBar $bar)
     {
         $this->bar = $bar;
@@ -46,9 +52,14 @@ class OriginalProgressBar implements Progress
         return [];
     }
 
-    public static function getPersisted($uid)
+    public function getPersisted()
     {
         return null;
+    }
+
+    public function deletePersisted()
+    {
+        // do nothing
     }
 
     public function __call($name, $arguments)

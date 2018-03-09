@@ -4,6 +4,7 @@ namespace Tequilarapido\Consolify\Output;
 
 use Symfony\Component\Console\Output\OutputInterface;
 use Tequilarapido\Consolify\Progress\Progress;
+use Tequilarapido\Consolify\Progress\ProgressHelper;
 
 /**
  * Console trait helpers.
@@ -43,18 +44,32 @@ trait Output
 
     public function createProgress($max, $uid, $advance = 0)
     {
-        if (!class_exists($progressClass = config('consolify.progress.concrete_class'))) {
-            throw new \LogicException("Cannot find progress class [$progressClass]");
-        }
-
-
-        $this->progress = new $progressClass($this->output->createProgressBar($max), $uid);
+        $this->progress = ProgressHelper::newProgressInstance($max, $uid, $this->output);
 
         $this->progress->setFormat(" %current%/%max% [%bar%] %percent:3s%% %elapsed:6s%/%estimated:-6s% %memory:6s% -- %message%");
         $this->progress->setRedrawFrequency(1);
         $this->progress->setMessage("");
         $this->progress->start();
         $this->progress->advance($advance);
+    }
+
+    public function advanceProgress($step = 1)
+    {
+        if (!$this->progress) {
+            throw new \Exception('No progress was created.');
+        }
+
+        $this->progress->advance($step);
+    }
+
+    public function setProgressMessage($message)
+    {
+        $this->progress->setMessage($message);
+    }
+
+    public function finishProgress()
+    {
+        $this->progress->finish();
     }
 
     /**
@@ -200,5 +215,15 @@ trait Output
     protected function setSleepModeStateInProgressBar($on, $message = '', $remaining = null)
     {
         $this->progress->setSleepModeState($on, $message, $remaining);
+    }
+
+    /** @return Progress */
+    protected function createProgressInstance($max, $uid)
+    {
+        if (!class_exists($progressClass = config('consolify.progress.concrete_class'))) {
+            throw new \LogicException("Cannot find progress class [$progressClass]");
+        }
+
+        return new $progressClass($this->output->createProgressBar($max), $uid);
     }
 }

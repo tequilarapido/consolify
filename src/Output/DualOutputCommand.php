@@ -6,6 +6,7 @@ use Illuminate\Console\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Exception;
+use Tequilarapido\Consolify\Trace\TraceReserved;
 
 abstract class DualOutputCommand extends Command
 {
