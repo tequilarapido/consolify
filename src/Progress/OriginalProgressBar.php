@@ -12,12 +12,6 @@ class OriginalProgressBar implements Progress
     /** @var string */
     protected $uid;
 
-    public function __construct(ProgressBar $bar, $uid)
-    {
-        $this->bar = $bar;
-        $this->uid = $uid;
-    }
-
     public function setProgressBar(ProgressBar $bar)
     {
         $this->bar = $bar;
@@ -29,7 +23,7 @@ class OriginalProgressBar implements Progress
     {
         $this->uid = $uid;
 
-        return $uid;
+        return $this;
     }
 
     public function advance($step = 1)
