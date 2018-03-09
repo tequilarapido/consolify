@@ -4,7 +4,7 @@ namespace Tequilarapido\Consolify\Progress;
 
 use Symfony\Component\Console\Helper\ProgressBar;
 
-class OriginalProgressBar implements Progress
+class ClassicProgress implements Progress
 {
     /** @var ProgressBar */
     protected $bar;

@@ -1,6 +1,6 @@
 <?php
 
-use Tequilarapido\Consolify\Progress\OriginalProgressBar;
+use Tequilarapido\Consolify\Progress\ClassicProgress;
 
 return [
 
@@ -17,7 +17,7 @@ return [
         |          - Store progress in redis.
         |--------------------------------------------------------------------------
         */
-        'concrete_class' => OriginalProgressBar::class,
+        'concrete_class' => ClassicProgress::class,
 
         /*
         |--------------------------------------------------------------------------
