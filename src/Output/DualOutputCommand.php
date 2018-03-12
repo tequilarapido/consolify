@@ -2,10 +2,10 @@
 
 namespace Tequilarapido\Consolify\Output;
 
+use Exception;
 use Illuminate\Console\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Exception;
 use Tequilarapido\Consolify\Trace\TraceReserved;
 
 abstract class DualOutputCommand extends Command
@@ -33,7 +33,9 @@ abstract class DualOutputCommand extends Command
      * before the command runs.
      *
      *  ie. Disable query loging for performance response (DB::disableQueryLog())
+     *
      * @param InputInterface $input
+     *
      * @return
      */
     abstract protected function beforeRun(InputInterface $input);
@@ -43,15 +45,17 @@ abstract class DualOutputCommand extends Command
      * output will be streamed.
      *
      * @param InputInterface $input
+     *
      * @return mixed
      */
     abstract protected function outputFilePath(InputInterface $input);
 
     /**
-     * Run the command
+     * Run the command.
      *
      * @param $input
      * @param $output
+     *
      * @return int
      */
     protected function effectiveRun($input, $output)
@@ -77,11 +81,10 @@ abstract class DualOutputCommand extends Command
      */
     protected function handeException(Exception $e)
     {
-        $this->error(TraceReserved::FAILED . " {$e->getMessage()}");
+        $this->error(TraceReserved::FAILED." {$e->getMessage()}");
 
         app()->log->error($e);
     }
-
 
     /**
      * For some operations we need to get the value of an argument passed to the command.
@@ -95,17 +98,18 @@ abstract class DualOutputCommand extends Command
      */
     protected function getNotParsedArgument(InputInterface $input, $index)
     {
-        return explode(' ', (string)$input)[$index];
+        return explode(' ', (string) $input)[$index];
     }
 
     /**
-     * Do `-vvv` was used when calling the command
+     * Do `-vvv` was used when calling the command.
      *
      * @param InputInterface $input
+     *
      * @return bool
      */
     protected function isVerbose(InputInterface $input)
     {
-        return (bool)substr_count((string)$input, '-vvv');
+        return (bool) substr_count((string) $input, '-vvv');
     }
 }

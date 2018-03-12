@@ -12,32 +12,34 @@ class Trace
 
     public static function fromFile($file)
     {
-        $instance = new static;
+        $instance = new static();
 
         return $instance->setUid($instance->fileToUid($file));
     }
 
     public static function fromUid($uid)
     {
-        return (new static)->setUid($uid);
+        return (new static())->setUid($uid);
     }
 
     public function setBasePath($basePath)
     {
         $this->basePath = $basePath;
+
         return $this;
     }
 
     public function setUid($uid)
     {
         $this->uid = $uid;
+
         return $this;
     }
 
     public function get($from = null, $truncate = true)
     {
         if (!$file = $this->getFile()) {
-            throw new TraceException("Cannot find file to trace.");
+            throw new TraceException('Cannot find file to trace.');
         }
 
         return $this->readLast($file, $from, $truncate);
@@ -46,13 +48,13 @@ class Trace
     protected function getFile()
     {
         if (!file_exists($file = $this->uidToFile($this->uid))) {
-            return null;
+            return;
         }
 
         return $file;
     }
 
-    protected function readLast($file, $last_position = null, $truncate)
+    protected function readLast($file, $last_position, $truncate)
     {
         clearstatcache(false, $file);
         $len = filesize($file);
@@ -61,13 +63,13 @@ class Trace
         if ($len < $last_position) {
             return [
                 'last_position' => 0,
-                'operation' => 'ERASE',
+                'operation'     => 'ERASE',
             ];
         }
 
         // If there is new content
         if ($len > $last_position) {
-            $f = fopen($file, "rb");
+            $f = fopen($file, 'rb');
             if (!$f) {
                 throw new \LogicException("Cannot read file. [$file]");
             }
@@ -95,14 +97,14 @@ class Trace
 
         return [
             'last_position' => $last_position,
-            'operation' => 'APPEND',
-            'lines' => $this->format($lines),
+            'operation'     => 'APPEND',
+            'lines'         => $this->format($lines),
         ];
     }
 
     protected function format($lines)
     {
-        /**
+        /*
          * @todo format using an ansi converer to preserve colors ?
          */
         return $lines;
@@ -120,17 +122,18 @@ class Trace
 
     public function addCommandLine($command)
     {
-        file_put_contents($this->getFile(), "[{$command}]" . PHP_EOL, FILE_APPEND);
+        file_put_contents($this->getFile(), "[{$command}]".PHP_EOL, FILE_APPEND);
     }
 
     /**
-     * Converts uid to filepath
+     * Converts uid to filepath.
      *
      *      UID     = {SUBFOLDER}_{NAME}
      *          ->
      *      PATH    = {storage_path}/{SUBFOLDER}/{NAME}.log
      *
      * @param $uid
+     *
      * @return null|string
      */
     public function uidToFile($uid)
@@ -141,30 +144,32 @@ class Trace
     }
 
     /**
-     * Convert full log path to UID
+     * Convert full log path to UID.
      *
      *      PATH    = {storage_path}/{SUBFOLDER}/{NAME}.log
      *          ->
      *      UID     = {SUBFOLDER}_{NAME}
      *
      * @param $fullPath
+     *
      * @return mixed
      */
     public function fileToUid($fullPath)
     {
         return $this->relativeFileToUid(
-            str_replace($this->basePath . '/', '', $fullPath)
+            str_replace($this->basePath.'/', '', $fullPath)
         );
     }
 
     /**
-     * Convert relative log path to UID
+     * Convert relative log path to UID.
      *
      *      PATH    = {SUBFOLDER}/{NAME}.log
      *          ->
      *      UID     = {SUBFOLDER}_{NAME}
      *
      * @param $relativePath
+     *
      * @return mixed
      */
     public function relativeFileToUid($relativePath)

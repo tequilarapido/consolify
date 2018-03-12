@@ -2,15 +2,15 @@
 
 namespace Tequilarapido\Consolify\Output;
 
-use Symfony\Component\Console\Output\StreamOutput;
 use Symfony\Component\Console\Output\ConsoleOutput;
+use Symfony\Component\Console\Output\StreamOutput;
 
 class DualOutput extends StreamOutput
 {
     /** @var string */
     protected $file;
 
-    /** @var  ConsoleOutput */
+    /** @var ConsoleOutput */
     protected $consoleOuput;
 
     /**
@@ -27,6 +27,7 @@ class DualOutput extends StreamOutput
      * Set console output from artisan console command.
      *
      * @param $consoleOutput
+     *
      * @return $this
      */
     public function setConsoleOutput($consoleOutput)
@@ -40,6 +41,7 @@ class DualOutput extends StreamOutput
      * Set the path to the file where the console output will be streamed.
      *
      * @param $file
+     *
      * @return $this
      */
     public function setFile($file)
@@ -49,4 +51,3 @@ class DualOutput extends StreamOutput
         return $this;
     }
 }
-

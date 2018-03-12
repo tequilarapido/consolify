@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Tequilarapido\Consolify\Progress;
 
 use Symfony\Component\Console\Output\OutputInterface;
@@ -13,7 +12,7 @@ class ProgressHelper
             throw new \LogicException("Cannot find progress class [$progressClass]");
         }
 
-        $progress = (new $progressClass)
+        $progress = (new $progressClass())
             ->setProgressBar($output->createProgressBar($max))
             ->setUid($uid);
 
@@ -30,7 +29,6 @@ class ProgressHelper
             throw new \LogicException("Cannot find progress class [$progressClass]");
         }
 
-        return (new $progressClass)->setUid($uid);
+        return (new $progressClass())->setUid($uid);
     }
-
 }

@@ -48,7 +48,6 @@ class ClassicProgress implements Progress
 
     public function getPersisted()
     {
-        return null;
     }
 
     public function deletePersisted()

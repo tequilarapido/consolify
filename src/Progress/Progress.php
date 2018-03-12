@@ -5,11 +5,10 @@ namespace Tequilarapido\Consolify\Progress;
 use Symfony\Component\Console\Helper\ProgressBar;
 
 /**
- * Interface Progress
+ * Interface Progress.
  *
  * Wrapper for symfony console original progress bar. Add a way to persist
  * progress bar information in a store (ie. Redis).
- *
  */
 interface Progress
 {
@@ -17,6 +16,7 @@ interface Progress
      * Set the original symfony console bar.
      *
      * @param ProgressBar $bar
+     *
      * @return mixed
      */
     public function setProgressBar(ProgressBar $bar);
@@ -34,6 +34,7 @@ interface Progress
      * Advance progress bar.
      *
      * @param int $step
+     *
      * @return mixed
      */
     public function advance($step = 1);
@@ -42,16 +43,18 @@ interface Progress
      * Starts progress bar.
      *
      * @param null $max
+     *
      * @return mixed
      */
     public function start($max = null);
 
     /**
-     * Set sleep mode state
+     * Set sleep mode state.
      *
      * @param $on
      * @param $message
      * @param $remaining
+     *
      * @return mixed
      */
     public function setSleepModeState($on, $message, $remaining);
@@ -73,7 +76,6 @@ interface Progress
 
     /**
      * Delete persisted progress information from store.
-     *
      */
     public function deletePersisted();
 
@@ -82,6 +84,7 @@ interface Progress
      *
      * @param $name
      * @param $arguments
+     *
      * @return mixed
      */
     public function __call($name, $arguments);

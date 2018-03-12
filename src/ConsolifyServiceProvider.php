@@ -12,7 +12,7 @@ class ConsolifyServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->publishes([
-            __DIR__ . '/../config/consolify.php' => config_path('consolify.php'),
+            __DIR__.'/../config/consolify.php' => config_path('consolify.php'),
         ]);
     }
 
@@ -21,7 +21,7 @@ class ConsolifyServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->mergeConfigFrom(__DIR__ . '/../config/consolify.php', 'consolify');
+        $this->mergeConfigFrom(__DIR__.'/../config/consolify.php', 'consolify');
 
         // ...
     }
