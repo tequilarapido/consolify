@@ -84,7 +84,7 @@ class RedisProgress implements Progress
     {
         $pattern = static::prefixedKey($this->uid).'*';
 
-        if (!empty($keys = static::redis()->keys($pattern))) {
+        if (! empty($keys = static::redis()->keys($pattern))) {
             static::redis()->del(static::redis()->keys($pattern));
         }
     }
@@ -111,11 +111,11 @@ class RedisProgress implements Progress
 
     protected function estimated()
     {
-        if (!$this->bar->getMaxSteps()) {
+        if (! $this->bar->getMaxSteps()) {
             return;
         }
 
-        return !$this->bar->getProgress()
+        return ! $this->bar->getProgress()
             ? 0
             : round((time() - $this->bar->getStartTime()) / $this->bar->getProgress() * $this->bar->getMaxSteps());
     }

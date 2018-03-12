@@ -8,7 +8,7 @@ class ProgressHelper
 {
     public static function newProgressInstance($max, $uid, OutputInterface $output)
     {
-        if (!class_exists($progressClass = config('consolify.progress.concrete_class'))) {
+        if (! class_exists($progressClass = config('consolify.progress.concrete_class'))) {
             throw new \LogicException("Cannot find progress class [$progressClass]");
         }
 
@@ -25,7 +25,7 @@ class ProgressHelper
     /** @return Progress */
     public static function progressFor($uid)
     {
-        if (!class_exists($progressClass = config('consolify.progress.concrete_class'))) {
+        if (! class_exists($progressClass = config('consolify.progress.concrete_class'))) {
             throw new \LogicException("Cannot find progress class [$progressClass]");
         }
 

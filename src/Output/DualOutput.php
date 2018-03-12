@@ -2,8 +2,8 @@
 
 namespace Tequilarapido\Consolify\Output;
 
-use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Console\Output\StreamOutput;
+use Symfony\Component\Console\Output\ConsoleOutput;
 
 class DualOutput extends StreamOutput
 {

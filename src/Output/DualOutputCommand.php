@@ -4,9 +4,9 @@ namespace Tequilarapido\Consolify\Output;
 
 use Exception;
 use Illuminate\Console\Command;
+use Tequilarapido\Consolify\Trace\TraceReserved;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Tequilarapido\Consolify\Trace\TraceReserved;
 
 abstract class DualOutputCommand extends Command
 {
