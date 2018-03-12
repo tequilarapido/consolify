@@ -2,9 +2,9 @@
 
 namespace Tequilarapido\Consolify\Output;
 
-use Symfony\Component\Console\Output\OutputInterface;
 use Tequilarapido\Consolify\Progress\Progress;
 use Tequilarapido\Consolify\Progress\ProgressHelper;
+use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Console trait helpers.
@@ -54,7 +54,7 @@ trait Output
 
     public function advanceProgress($step = 1)
     {
-        if (!$this->progress) {
+        if (! $this->progress) {
             throw new \Exception('No progress was created.');
         }
 
@@ -78,7 +78,7 @@ trait Output
      */
     public function info($string)
     {
-        if (!$this->output) {
+        if (! $this->output) {
             return;
         }
 
@@ -92,7 +92,7 @@ trait Output
      */
     public function line($string)
     {
-        if (!$this->output) {
+        if (! $this->output) {
             return;
         }
 
@@ -106,7 +106,7 @@ trait Output
      */
     public function comment($string)
     {
-        if (!$this->output) {
+        if (! $this->output) {
             return;
         }
 
@@ -120,7 +120,7 @@ trait Output
      */
     public function error($string)
     {
-        if (!$this->output) {
+        if (! $this->output) {
             return;
         }
 
@@ -134,7 +134,7 @@ trait Output
      */
     public function done($string)
     {
-        if (!$this->output) {
+        if (! $this->output) {
             return;
         }
 
@@ -219,7 +219,7 @@ trait Output
     /** @return Progress */
     protected function createProgressInstance($max, $uid)
     {
-        if (!class_exists($progressClass = config('consolify.progress.concrete_class'))) {
+        if (! class_exists($progressClass = config('consolify.progress.concrete_class'))) {
             throw new \LogicException("Cannot find progress class [$progressClass]");
         }
 

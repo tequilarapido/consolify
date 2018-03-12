@@ -38,7 +38,7 @@ class Trace
 
     public function get($from = null, $truncate = true)
     {
-        if (!$file = $this->getFile()) {
+        if (! $file = $this->getFile()) {
             throw new TraceException('Cannot find file to trace.');
         }
 
@@ -47,7 +47,7 @@ class Trace
 
     protected function getFile()
     {
-        if (!file_exists($file = $this->uidToFile($this->uid))) {
+        if (! file_exists($file = $this->uidToFile($this->uid))) {
             return;
         }
 
@@ -70,13 +70,13 @@ class Trace
         // If there is new content
         if ($len > $last_position) {
             $f = fopen($file, 'rb');
-            if (!$f) {
+            if (! $f) {
                 throw new \LogicException("Cannot read file. [$file]");
             }
 
             $lines = [];
             fseek($f, $last_position);
-            while (!feof($f)) {
+            while (! feof($f)) {
                 $lines = array_merge(
                     $lines,
                     explode("\n", fread($f, 4096))
