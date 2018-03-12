@@ -2,9 +2,8 @@
 
 namespace Tequilarapido\Consolify\Progress;
 
-use Illuminate\Redis\RedisManager;
-use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Helper\Helper;
+use Symfony\Component\Console\Helper\ProgressBar;
 
 class RedisProgress implements Progress
 {
@@ -55,14 +54,14 @@ class RedisProgress implements Progress
     public function summary()
     {
         return [
-            'elapsed' => Helper::formatTime($this->elapsed()),
+            'elapsed'   => Helper::formatTime($this->elapsed()),
             'estimated' => Helper::formatTime($this->estimated()),
-            'memory' => Helper::formatMemory(memory_get_usage(true)),
-            'current' => $this->bar->getProgress(),
-            'max' => $this->bar->getMaxSteps(),
-            'percent' => $this->percent(),
-            'message' => $this->bar->getMessage(),
-            'sleepMode' => $this->sleepModeState
+            'memory'    => Helper::formatMemory(memory_get_usage(true)),
+            'current'   => $this->bar->getProgress(),
+            'max'       => $this->bar->getMaxSteps(),
+            'percent'   => $this->percent(),
+            'message'   => $this->bar->getMessage(),
+            'sleepMode' => $this->sleepModeState,
         ];
     }
 
@@ -83,7 +82,7 @@ class RedisProgress implements Progress
 
     public function deletePersisted()
     {
-        $pattern = static::prefixedKey($this->uid) . '*';
+        $pattern = static::prefixedKey($this->uid).'*';
 
         if (!empty($keys = static::redis()->keys($pattern))) {
             static::redis()->del(static::redis()->keys($pattern));
@@ -102,7 +101,7 @@ class RedisProgress implements Progress
 
     protected static function prefixedKey($key)
     {
-        return config('consolify.progress.redis_prefix') . $key;
+        return config('consolify.progress.redis_prefix').$key;
     }
 
     protected function elapsed()
@@ -113,7 +112,7 @@ class RedisProgress implements Progress
     protected function estimated()
     {
         if (!$this->bar->getMaxSteps()) {
-            return null;
+            return;
         }
 
         return !$this->bar->getProgress()
@@ -127,7 +126,7 @@ class RedisProgress implements Progress
     }
 
     /**
-     * return Redis connection
+     * return Redis connection.
      *
      * @return \Illuminate\Redis\Connections\Connection
      */

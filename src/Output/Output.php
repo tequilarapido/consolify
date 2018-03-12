@@ -10,11 +10,9 @@ use Tequilarapido\Consolify\Progress\ProgressHelper;
  * Console trait helpers.
  *
  * Brings the console methods to any service worker class.
- *
  */
 trait Output
 {
-
     /**
      * Output interface.
      *
@@ -33,6 +31,7 @@ trait Output
      * Set output interface.
      *
      * @param OutputInterface $output
+     *
      * @return $this
      */
     public function setOutput(OutputInterface $output)
@@ -46,9 +45,9 @@ trait Output
     {
         $this->progress = ProgressHelper::newProgressInstance($max, $uid, $this->output);
 
-        $this->progress->setFormat(" %current%/%max% [%bar%] %percent:3s%% %elapsed:6s%/%estimated:-6s% %memory:6s% -- %message%");
+        $this->progress->setFormat(' %current%/%max% [%bar%] %percent:3s%% %elapsed:6s%/%estimated:-6s% %memory:6s% -- %message%');
         $this->progress->setRedrawFrequency(1);
-        $this->progress->setMessage("");
+        $this->progress->setMessage('');
         $this->progress->start();
         $this->progress->advance($advance);
     }
@@ -75,7 +74,7 @@ trait Output
     /**
      * Write a string as information output.
      *
-     * @param  string $string
+     * @param string $string
      */
     public function info($string)
     {
@@ -89,7 +88,7 @@ trait Output
     /**
      * Write a string as standard output.
      *
-     * @param  string $string
+     * @param string $string
      */
     public function line($string)
     {
@@ -103,7 +102,7 @@ trait Output
     /**
      * Write a string as comment output.
      *
-     * @param  string $string
+     * @param string $string
      */
     public function comment($string)
     {
@@ -117,7 +116,7 @@ trait Output
     /**
      * Write a string as error output.
      *
-     * @param  string $string
+     * @param string $string
      */
     public function error($string)
     {
@@ -131,7 +130,7 @@ trait Output
     /**
      * Write a string prefixed by a check mark.
      *
-     * @param      $string
+     * @param   $string
      */
     public function done($string)
     {
@@ -143,7 +142,7 @@ trait Output
     }
 
     /**
-     * Simple table
+     * Simple table.
      *
      * @param $headers
      * @param $rows
@@ -153,9 +152,8 @@ trait Output
         $this->output->table($headers, $rows);
     }
 
-
     /**
-     * Overwrite previous line
+     * Overwrite previous line.
      *
      * @param $string
      */
@@ -177,32 +175,33 @@ trait Output
 
     protected function sleepFor($seconds, $cycle = 1)
     {
-        $this->line($state = "Enterting sleep mode");
+        $this->line($state = 'Enterting sleep mode');
         $this->setSleepModeStateInProgressBar($state);
 
         $remaining = $seconds;
         while ($remaining > $cycle) {
             $remaining -= $cycle;
 
-            $this->setSleepModeStateInProgressBar($state = "Remaining : " . $this->formatSeconds($remaining));
+            $this->setSleepModeStateInProgressBar($state = 'Remaining : '.$this->formatSeconds($remaining));
             $this->line($state);
 
             sleep($cycle);
         }
 
-        $this->line("Leaving sleep mode");
+        $this->line('Leaving sleep mode');
         $this->setSleepModeStateInProgressBar(null);
     }
 
     /**
-     * Format seconds
+     * Format seconds.
      *
      * @param $seconds
+     *
      * @return string
      */
     protected function formatRemainingSeconds($seconds)
     {
-        return gmdate("i", $seconds) . 'm, ' . gmdate('s', $seconds) . 's';
+        return gmdate('i', $seconds).'m, '.gmdate('s', $seconds).'s';
     }
 
     /**
@@ -210,7 +209,7 @@ trait Output
      *
      * @param $on
      * @param string $message
-     * @param null $remaining
+     * @param null   $remaining
      */
     protected function setSleepModeStateInProgressBar($on, $message = '', $remaining = null)
     {
