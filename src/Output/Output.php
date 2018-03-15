@@ -182,7 +182,7 @@ trait Output
         while ($remaining > $cycle) {
             $remaining -= $cycle;
 
-            $this->setSleepModeStateInProgressBar($state = 'Remaining : '.$this->formatSeconds($remaining));
+            $this->setSleepModeStateInProgressBar($state = 'Remaining : '.$this->formatRemainingSeconds($remaining));
             $this->line($state);
 
             sleep($cycle);
