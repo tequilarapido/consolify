@@ -13,7 +13,7 @@ class RedisProgress implements Progress
     /** @var string */
     protected $uid;
 
-    /** @var string|null */
+    /** @var SleepModeState */
     protected $sleepModeState;
 
     public function setProgressBar(ProgressBar $bar)
@@ -42,9 +42,9 @@ class RedisProgress implements Progress
         $this->persistProgress();
     }
 
-    public function setSleepModeState($on, $message, $remaining)
+    public function setSleepModeState(SleepModeState $sleepModeState)
     {
-        $this->sleepModeState = $on ? $message : null;
+        $this->sleepModeState = $sleepModeState;
 
         // Progress bar is not advanced here as we are sleep
         // so we need to persist progress manually, so the UI can keep up with sleep timing.
@@ -54,14 +54,14 @@ class RedisProgress implements Progress
     public function summary()
     {
         return [
-            'elapsed'   => Helper::formatTime($this->elapsed()),
+            'elapsed' => Helper::formatTime($this->elapsed()),
             'estimated' => Helper::formatTime($this->estimated()),
-            'memory'    => Helper::formatMemory(memory_get_usage(true)),
-            'current'   => $this->bar->getProgress(),
-            'max'       => $this->bar->getMaxSteps(),
-            'percent'   => $this->percent(),
-            'message'   => $this->bar->getMessage(),
-            'sleepMode' => $this->sleepModeState,
+            'mremory' => Helper::formatMemory(memory_get_usage(true)),
+            'current' => $this->bar->getProgress(),
+            'max' => $this->bar->getMaxSteps(),
+            'percent' => $this->percent(),
+            'message' => $this->bar->getMessage(),
+            'sleepMode' => $this->sleepModeState ? $this->sleepModeState->toArray() : null,
         ];
     }
 
@@ -82,9 +82,9 @@ class RedisProgress implements Progress
 
     public function deletePersisted()
     {
-        $pattern = static::prefixedKey($this->uid).'*';
+        $pattern = static::prefixedKey($this->uid) . '*';
 
-        if (! empty($keys = static::redis()->keys($pattern))) {
+        if (!empty($keys = static::redis()->keys($pattern))) {
             static::redis()->del(static::redis()->keys($pattern));
         }
     }
@@ -101,7 +101,7 @@ class RedisProgress implements Progress
 
     protected static function prefixedKey($key)
     {
-        return config('consolify.progress.redis_prefix').$key;
+        return config('consolify.progress.redis_prefix') . $key;
     }
 
     protected function elapsed()
@@ -111,11 +111,11 @@ class RedisProgress implements Progress
 
     protected function estimated()
     {
-        if (! $this->bar->getMaxSteps()) {
+        if (!$this->bar->getMaxSteps()) {
             return;
         }
 
-        return ! $this->bar->getProgress()
+        return !$this->bar->getProgress()
             ? 0
             : round((time() - $this->bar->getStartTime()) / $this->bar->getProgress() * $this->bar->getMaxSteps());
     }

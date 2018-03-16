@@ -36,7 +36,7 @@ class ClassicProgress implements Progress
         $this->bar->start($max);
     }
 
-    public function setSleepModeState($on, $message, $remaining)
+    public function setSleepModeState(SleepModeState $sleepModeState)
     {
         // do nothing
     }

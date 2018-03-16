@@ -5,6 +5,7 @@ namespace Tequilarapido\Consolify\Output;
 use Tequilarapido\Consolify\Progress\Progress;
 use Tequilarapido\Consolify\Progress\ProgressHelper;
 use Symfony\Component\Console\Output\OutputInterface;
+use Tequilarapido\Consolify\Progress\SleepModeState;
 
 /**
  * Console trait helpers.
@@ -54,7 +55,7 @@ trait Output
 
     public function advanceProgress($step = 1)
     {
-        if (! $this->progress) {
+        if (!$this->progress) {
             throw new \Exception('No progress was created.');
         }
 
@@ -78,7 +79,7 @@ trait Output
      */
     public function info($string)
     {
-        if (! $this->output) {
+        if (!$this->output) {
             return;
         }
 
@@ -92,7 +93,7 @@ trait Output
      */
     public function line($string)
     {
-        if (! $this->output) {
+        if (!$this->output) {
             return;
         }
 
@@ -106,7 +107,7 @@ trait Output
      */
     public function comment($string)
     {
-        if (! $this->output) {
+        if (!$this->output) {
             return;
         }
 
@@ -120,7 +121,7 @@ trait Output
      */
     public function error($string)
     {
-        if (! $this->output) {
+        if (!$this->output) {
             return;
         }
 
@@ -134,7 +135,7 @@ trait Output
      */
     public function done($string)
     {
-        if (! $this->output) {
+        if (!$this->output) {
             return;
         }
 
@@ -175,51 +176,28 @@ trait Output
 
     protected function sleepFor($seconds, $cycle = 1)
     {
-        $this->line($state = 'Enterting sleep mode');
-        $this->setSleepModeStateInProgressBar($state);
+        $this->progress->setSleepModeState($state = SleepModeState::entering());
+        $this->line($state->getMessage());
 
         $remaining = $seconds;
         while ($remaining > $cycle) {
             $remaining -= $cycle;
 
-            $this->setSleepModeStateInProgressBar($state = 'Remaining : '.$this->formatRemainingSeconds($remaining));
-            $this->line($state);
+            $this->progress->setSleepModeState($state = SleepModeState::remaining($remaining));
+            $this->line($state->getMessage());
 
             sleep($cycle);
         }
 
-        $this->line('Leaving sleep mode');
-        $this->setSleepModeStateInProgressBar(null);
+        $this->progress->setSleepModeState($state = SleepModeState::leaving());
+        $this->line($state->getMessage());
     }
 
-    /**
-     * Format seconds.
-     *
-     * @param $seconds
-     *
-     * @return string
-     */
-    protected function formatRemainingSeconds($seconds)
-    {
-        return gmdate('i', $seconds).'m, '.gmdate('s', $seconds).'s';
-    }
-
-    /**
-     * Set sleep mode state in progress.
-     *
-     * @param $on
-     * @param string $message
-     * @param null   $remaining
-     */
-    protected function setSleepModeStateInProgressBar($on, $message = '', $remaining = null)
-    {
-        $this->progress->setSleepModeState($on, $message, $remaining);
-    }
 
     /** @return Progress */
     protected function createProgressInstance($max, $uid)
     {
-        if (! class_exists($progressClass = config('consolify.progress.concrete_class'))) {
+        if (!class_exists($progressClass = config('consolify.progress.concrete_class'))) {
             throw new \LogicException("Cannot find progress class [$progressClass]");
         }
 

@@ -51,13 +51,11 @@ interface Progress
     /**
      * Set sleep mode state.
      *
-     * @param $on
-     * @param $message
-     * @param $remaining
-     *
-     * @return mixed
+     * @param SleepModeState $sleepModeState
+     * 
+     * @return $this
      */
-    public function setSleepModeState($on, $message, $remaining);
+    public function setSleepModeState(SleepModeState $sleepModeState);
 
     /**
      * Returns progress informations as array.
