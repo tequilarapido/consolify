@@ -45,7 +45,7 @@ class Trace
         return $this->readLast($file, $from, $truncate);
     }
 
-    protected function getFile()
+    public function getFile()
     {
         if (! file_exists($file = $this->uidToFile($this->uid))) {
             return;
